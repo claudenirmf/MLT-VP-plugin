@@ -49,4 +49,12 @@ Temporary Items
 #Eclipse
 .metadata
 bin/
-classes/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
