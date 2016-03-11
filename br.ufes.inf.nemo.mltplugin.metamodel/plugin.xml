@@ -1,0 +1,39 @@
+<plugin
+		id="br.ufes.inf.nemo.mltplugin"
+		name="MLT Plugin"
+		description="MLT Plugin for VP 12.0"
+		provider="Claudenir Fonseca"
+		class="br.ufes.inf.nemo.mltplugin.MLTPlugin">
+	
+	<actionSets>
+		<actionSet id="br.ufes.inf.nemo.mltplugin.actionset1">
+			<separator menuPath="Tools/#" />
+			<action 
+					id="br.ufes.inf.nemo.mltplugin.actions.ReloadPluginAction"
+					actionType="generalAction" 
+					label="Reload MLT Plugin" 
+					tooltip="Reload MLT Plugin" 
+					style="normal"
+					menuPath="Tools/#">
+				<actionController class="br.ufes.inf.nemo.mltplugin.actions.ReloadMLTPluginActionController" />
+			</action>
+			<action 
+					id="br.ufes.inf.nemo.mltplugin.actions.RunValidationAction"
+					actionType="generalAction"
+					label="Run MLT Plugin"
+					tooltip="Run MLT Plugin" 
+					style="normal"
+					menuPath="Tools/#">
+				<actionController class="br.ufes.inf.nemo.mltplugin.actions.RunMLTPluginActionController" />
+			</action>
+		</actionSet>
+	</actionSets>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated MLTPluginMetamodel -->
+      <package
+            uri="br.ufes.inf.nemo.mltplugin.metamodel"
+            class="br.ufes.inf.nemo.mltplugin.metamodel.MetamodelPackage"
+            genModel="model/MLTPluginMetamodel.xcore"/>
+   </extension>
+
+</plugin>
