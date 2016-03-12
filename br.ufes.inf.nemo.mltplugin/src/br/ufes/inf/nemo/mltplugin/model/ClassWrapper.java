@@ -2,19 +2,19 @@ package br.ufes.inf.nemo.mltplugin.model;
 
 import com.vp.plugin.model.IClass;
 
-public class MLTClass extends ModelElement {
+public class ClassWrapper extends ModelElementWrapper {
 
 	private static final String POWERTYPE_STR = "powertype";
 	
 	private int order = 0;
 	
-	MLTClass(IClass source){
+	ClassWrapper(IClass source){
 		super(source);
 	}
 	
 	@Override
 	public IClass getSourceEntity(){
-		return (IClass) getSourceEntity();
+		return (IClass) super.getSourceEntity();
 	}
 	
 	public int getorder(){

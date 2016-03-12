@@ -2,11 +2,11 @@ package br.ufes.inf.nemo.mltplugin.model;
 
 import com.vp.plugin.model.IModelElement;
 
-public class ModelElement {
+public class ModelElementWrapper {
 	
 	private final IModelElement sourceEntity;
 	
-	ModelElement(IModelElement source){
+	ModelElementWrapper(IModelElement source){
 		sourceEntity = source;
 	}
 	

@@ -3,11 +3,11 @@ package br.ufes.inf.nemo.mltplugin.model;
 import com.vp.plugin.model.IAssociation;
 import com.vp.plugin.model.IAssociationEnd;
 
-public class MLTAssociation extends ModelElement {
+public class AssociationWrapper extends ModelElementWrapper {
 	
 	public static final String INSTANTIATION_STR = "instantiation";
 	
-	public MLTAssociation(IAssociation source) {
+	public AssociationWrapper(IAssociation source) {
 		super(source);
 	}
 	

@@ -12,7 +12,7 @@ import com.vp.plugin.model.IGeneralizationSet;
 
 public class ModelManager {
 	
-	private static HashMap<String, ModelElement> modelCopyReference;
+	private static HashMap<String, ModelElementWrapper> modelCopyReference;
 	
 	public static void populateModel(){
 		final Iterator<?> modelElementList = ApplicationManager
@@ -20,30 +20,33 @@ public class ModelManager {
 		while (modelElementList.hasNext()) {
 			final Object modelElement = modelElementList.next();
 			if (modelElement instanceof IClass) {
-				final ModelElement classElement = new ModelElement(
+				final ClassWrapper classElement = new ClassWrapper(
 						(IClass) modelElement);
 				getModelCopy().put(((IClass) modelElement).getId(),
 						classElement);
-				LogUtilitary.log(classElement.report());
+				//LogUtilitary.log(classElement.report());
 			} else if (modelElement instanceof IAssociation) {
-				final MLTAssociation associationElement = new MLTAssociation(
+				final AssociationWrapper associationElement = new AssociationWrapper(
 						(IAssociation) modelElement);
 				getModelCopy().put(((IAssociation) modelElement).getId(),
 						associationElement);
-				LogUtilitary.log(associationElement.report());
+				//LogUtilitary.log(associationElement.report());
 			} else if (modelElement instanceof IGeneralizationSet) {
-				final MLTGeneralizationSet genSetElement = new MLTGeneralizationSet(
+				final GeneralizationSetWrapper genSetElement = new GeneralizationSetWrapper(
 						(IGeneralizationSet) modelElement);
 				getModelCopy().put(((IGeneralizationSet) modelElement).getId(),
 						genSetElement);
-				LogUtilitary.log(genSetElement.report());
+				//LogUtilitary.log(genSetElement.report());
 			}
+		}
+		for (ModelElementWrapper element : getModelCopy().values()) {
+			LogUtilitary.log(element.report());
 		}
 	}
 	
-	public static HashMap<String, ModelElement> getModelCopy(){
+	public static HashMap<String, ModelElementWrapper> getModelCopy(){
 		if(modelCopyReference == null){
-			modelCopyReference = new HashMap<String, ModelElement>();
+			modelCopyReference = new HashMap<String, ModelElementWrapper>();
 		}
 		return modelCopyReference;
 	}

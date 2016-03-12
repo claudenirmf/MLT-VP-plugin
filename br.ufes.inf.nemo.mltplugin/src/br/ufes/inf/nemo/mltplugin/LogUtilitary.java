@@ -12,4 +12,11 @@ public class LogUtilitary {
 			.getViewManager()
 			.showMessage(msg, LOG_ID);
 	}
+
+	public static void clearLog() {
+		ApplicationManager
+			.instance()
+			.getViewManager()
+			.clearMessages(LOG_ID);
+	}
 }

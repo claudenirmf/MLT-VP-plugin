@@ -6,9 +6,9 @@ import java.util.List;
 import com.vp.plugin.model.IGeneralization;
 import com.vp.plugin.model.IGeneralizationSet;
 
-public class MLTGeneralizationSet extends ModelElement {
+public class GeneralizationSetWrapper extends ModelElementWrapper {
 
-	MLTGeneralizationSet(IGeneralizationSet source) {
+	GeneralizationSetWrapper(IGeneralizationSet source) {
 		super(source);
 	}
 	
