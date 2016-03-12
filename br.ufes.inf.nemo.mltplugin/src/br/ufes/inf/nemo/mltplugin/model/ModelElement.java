@@ -4,22 +4,26 @@ import com.vp.plugin.model.IModelElement;
 
 public class ModelElement {
 	
-	private final IModelElement sourceElement;
+	private final IModelElement sourceEntity;
 	
 	ModelElement(IModelElement source){
-		sourceElement = source;
+		sourceEntity = source;
 	}
 	
-	public IModelElement getSourceElement(){
-		return sourceElement;
+	public IModelElement getSourceEntity(){
+		return sourceEntity;
 	}
 	
 	public String report(){
 		return "Model Element(NAME="
-			+sourceElement.getName()
+			+getSourceEntity().getName()
 			+", ID="
-			+sourceElement.getId()
+			+getSourceEntity().getId()
 			+")";
+	}
+	
+	public String getId(){
+		return getSourceEntity().getId();
 	}
 
 }

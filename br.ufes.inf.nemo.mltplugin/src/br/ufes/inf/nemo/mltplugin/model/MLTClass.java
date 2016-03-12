@@ -1,27 +1,20 @@
 package br.ufes.inf.nemo.mltplugin.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.vp.plugin.model.IClass;
 
 public class MLTClass extends ModelElement {
 
+	private static final String POWERTYPE_STR = "powertype";
+	
 	private int order = 0;
-	private String name;
-	private List<String> stereotypeList = new ArrayList<String>();
 	
 	MLTClass(IClass source){
 		super(source);
-		name = source.getName();
-		String[] sourceStereotypes = source.toStereotypeArray();
-		for (String stereotype : sourceStereotypes) {
-			stereotypeList.add(stereotype);
-		}
 	}
 	
-	public IClass getSourceElement(){
-		return (IClass) getSourceElement();
+	@Override
+	public IClass getSourceEntity(){
+		return (IClass) getSourceEntity();
 	}
 	
 	public int getorder(){
@@ -33,11 +26,26 @@ public class MLTClass extends ModelElement {
 	}
 	
 	public String getName(){
-		return name;
+		return getSourceEntity().getName();
 	}
 	
-	public List<String> getStereotypeList(){
-		return stereotypeList;
+	public String[] getStereotypeList(){
+		return getSourceEntity().toStereotypeArray();
 	}
 	
+	public boolean isPowertype(){
+		for (String stereotype : getStereotypeList()) {
+			if (stereotype == POWERTYPE_STR) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public String report(){
+		return "CLASS, NAME="+getName()
+				+", ID="+getId()
+				+", N_STR="+getStereotypeList().length;
+	}
 }
