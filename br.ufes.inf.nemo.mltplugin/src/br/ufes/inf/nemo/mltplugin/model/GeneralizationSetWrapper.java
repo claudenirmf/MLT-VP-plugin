@@ -48,5 +48,15 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 				+", N_SUBTYPES="+getSubTypesId().length
 				+", POWERTTYPE="+getPowerTypeId();
 	}
+	
+	@Override
+	public void validate() {
+		super.validate();
+		ruleGS01();
+	}
+
+	private void ruleGS01() {
+		
+	}
 
 }

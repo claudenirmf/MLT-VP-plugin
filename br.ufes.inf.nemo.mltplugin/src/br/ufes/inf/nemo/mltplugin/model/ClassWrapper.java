@@ -1,6 +1,10 @@
 package br.ufes.inf.nemo.mltplugin.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.vp.plugin.model.IClass;
+import com.vp.plugin.model.IRelationshipEnd;
 
 public class ClassWrapper extends ModelElementWrapper {
 
@@ -48,4 +52,21 @@ public class ClassWrapper extends ModelElementWrapper {
 				+", ID="+getId()
 				+", N_STR="+getStereotypeList().length;
 	}
+	
+	public String[] getOutcommingAssociationsId(){
+		final List<String> ret = new ArrayList<String>();
+		for (IRelationshipEnd fromEnd : getSourceEntity().toFromRelationshipEndArray()) {
+			ret.add(fromEnd.getId());
+		}
+		return ret.toArray(new String[0]);
+	}
+	
+	public String[] getIncommingAssociationsId(){
+		final List<String> ret = new ArrayList<String>();
+		for (IRelationshipEnd toEnd : getSourceEntity().toToRelationshipEndArray()) {
+			ret.add(toEnd.getId());
+		}
+		return ret.toArray(new String[0]);
+	}
+	
 }

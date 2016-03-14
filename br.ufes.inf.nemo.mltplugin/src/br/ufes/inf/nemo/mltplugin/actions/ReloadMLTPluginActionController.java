@@ -1,5 +1,7 @@
 package br.ufes.inf.nemo.mltplugin.actions;
 
+import java.util.Date;
+
 import br.ufes.inf.nemo.mltplugin.LogUtilitary;
 import br.ufes.inf.nemo.mltplugin.MLTPlugin;
 
@@ -13,7 +15,7 @@ public class ReloadMLTPluginActionController implements VPActionController {
 		LogUtilitary.log("Reloading again "+MLTPlugin.PLUG_ID+"...");
 		ApplicationManager.instance().reloadPluginClasses(MLTPlugin.PLUG_ID);
 		LogUtilitary.clearLog();
-		LogUtilitary.log("Reloading complete!");
+		LogUtilitary.log("Reloading complete! ["+new Date()+"]");
 	}
 
 	public void update(VPAction arg0) {}

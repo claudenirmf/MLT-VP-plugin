@@ -19,7 +19,6 @@ public class MoveFiles {
 			Files.copy(org_folder.toPath(), des_folder.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			System.out.println("Everything is fine");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
