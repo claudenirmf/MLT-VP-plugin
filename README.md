@@ -10,3 +10,6 @@ application by the user.
 Versions:
  - Visual Paradigm 12.0 Community Edition
  - Java SE 7
+
+History:
+ - Created by Claudenir M. Fonseca (15/03/2016)
