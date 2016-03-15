@@ -7,8 +7,10 @@ import br.ufes.inf.nemo.mltplugin.LogUtilitary;
 
 import com.vp.plugin.model.IAssociationEnd;
 import com.vp.plugin.model.IClass;
+import com.vp.plugin.model.IGeneralization;
 import com.vp.plugin.model.IMultiplicity;
 import com.vp.plugin.model.IRelationshipEnd;
+import com.vp.plugin.model.ISimpleRelationship;
 
 public class ClassWrapper extends ModelElementWrapper {
 
@@ -107,7 +109,7 @@ public class ClassWrapper extends ModelElementWrapper {
 	public boolean isBaseTypeof(String characterizerTypeId) {
 //		LogUtilitary.log("isBaseTypeof");
 		for (AssociationWrapper association : getOutcommingAssociations()) {
-			if(association.isInstantion() && association.getTargetElementId()==characterizerTypeId){
+			if(association.isInstantiation() && association.getTargetElementId()==characterizerTypeId){
 				return true;
 			}
 		}
@@ -117,13 +119,42 @@ public class ClassWrapper extends ModelElementWrapper {
 	@Override
 	public void validate() {
 		checkPowerType();
+		checkUniqueinstantiationRelation();
+		checkSameOrderSpecialization();
+	}
+
+	private void checkSameOrderSpecialization() {
+		for (ISimpleRelationship relationship : getSourceEntity().toToRelationshipArray()) {
+			if(relationship instanceof IGeneralization){
+				final ClassWrapper superType = (ClassWrapper) ModelManager.getModelElementWrapper(relationship.getFrom().getId());
+				if(getOrder() != superType.getOrder()){
+					LogUtilitary.log(
+							"ERROR: '"+getName()+"' (order="+getOrder()
+							+") cannot specialize an entity of a different order, '"
+							+superType.getName()+"' (order="+superType.getOrder()+").");
+				}
+			}
+		}
+	}
+
+	private void checkUniqueinstantiationRelation() {
+		int count = 0;
+		for (AssociationWrapper association : getIncommingAssociations()) {
+			if(association.isInstantiation()){
+				count++;
+			}
+		}
+		if(count>1){
+			LogUtilitary.log("ERROR: '"+getName()+"' is target of "+count
+				+" instantiation relations. The maximum is one. This error may lead to wrong order assignment.");
+		}
 	}
 
 	private void checkPowerType() {
 		if(isPowertype()){
 			int n_instatiations = 0;
 			for (AssociationWrapper association : getIncommingAssociations()) {
-				if(association.isInstantion()){
+				if(association.isInstantiation()){
 					n_instatiations++;
 				}
 			}
@@ -140,16 +171,42 @@ public class ClassWrapper extends ModelElementWrapper {
 	}
 
 	public void loadOrder() {
+//		LogUtilitary.log("loadOrder");
 		final List<String> visitedIds = new ArrayList<String>();
-		try {
-			getHouDependencies(visitedIds);
-			setOrder(visitedIds.size());
-		} catch (InstantiationCycleException e) {
-			LogUtilitary.log(
-				"ERRO: instantiation cycle detected for class '"+e.getName()+"' ID="+e.getId()
-			);
-			setOrder(0);
+		ClassWrapper tmp = this;
+		while(tmp != null){
+//			LogUtilitary.log("loadOrder loop "+tmp.getName());
+			if(visitedIds.contains(tmp.getId())){
+//				LogUtilitary.log("ERRO: instantiation cycle detected in class '"+tmp.getName()+"' ID="+tmp.getId());
+				setOrder(0);
+				return ;
+			} else {
+				visitedIds.add(getId());
+			}
+			tmp = tmp.getBaseType();
 		}
+		setOrder(visitedIds.size());
+	}
+//		try {
+//			getHouDependencies(visitedIds);
+//			setOrder(visitedIds.size());
+//		} catch (InstantiationCycleException e) {
+//			LogUtilitary.log(
+//				"ERRO: instantiation cycle detected for class '"+e.getName()+"' ID="+e.getId()
+//			);
+//			setOrder(0);
+//		}
+
+	public ClassWrapper getBaseType() {
+//		LogUtilitary.log("getBaseType");
+		for (AssociationWrapper association : getIncommingAssociations()) {
+//			LogUtilitary.log("getBaseType association "+association.getName());
+			if(association.isInstantiation()){
+//				LogUtilitary.log("getBaseType isInstantion"+association.getName());
+				return (ClassWrapper) ModelManager.getModelElementWrapper(association.getSourceElementId());
+			}
+		}
+		return null;
 	}
 
 	private void getHouDependencies(List<String> visitedIds) throws InstantiationCycleException {
@@ -158,7 +215,7 @@ public class ClassWrapper extends ModelElementWrapper {
 		}
 		visitedIds.add(getId());
 		for (AssociationWrapper association : getIncommingAssociations()) {
-			if(association.isInstantion()){
+			if(association.isInstantiation()){
 				association.getSourceElement().getHouDependencies(visitedIds);
 				return ;
 			}

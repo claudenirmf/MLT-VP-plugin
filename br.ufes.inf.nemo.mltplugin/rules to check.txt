@@ -1,0 +1,25 @@
+ClassWrapper:
+	- (DONE) Verify cardinality for power types in instantiation relations
+		- (DONE) MLT power types are targets of a instantion relation where target.multiplicity == ONE_TO_MANY
+		- (DONE) MLT power types must be targets of a instantiation relation
+	- (DONE) A base type is source of at most one MLT power type through an instantiation relation
+	- (DONE) Verify hierarchy order
+	- (DONE) Verify instantion cycles
+	- (DONE) Set order
+	- Complicated checking of power types hirarchies
+	- Complicated checking of specialization bet power type and characterizers of a given type
+
+AssociationWrapper:
+	- (DONE) (UNTESTED) if(isInstantiation) then target.order == source.order+1
+	
+GeneralizationWrapper:
+	- 
+
+GeneralizationSetWrapper:
+	- (DONE) The UML power type of a generalization set cannot be a MLT power type
+	- (DONE) Verify matching UML power type and characterizator type
+	- Verify disjointness and completeness according to instantiation cardnilaty
+		- If target.upperBound == 1, then isDisjoint == true
+		- If target.lowerBound ==0, then isComplete == false
+	- umlPowerType.order == superType.order++
+	- Complicated checking of no specialization between partitioners of a given type

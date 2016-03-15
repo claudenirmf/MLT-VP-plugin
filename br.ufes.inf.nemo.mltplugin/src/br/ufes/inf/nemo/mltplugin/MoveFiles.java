@@ -6,10 +6,13 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 
+import br.ufes.inf.nemo.mltplugin.model.AssociationWrapper;
+
 @SuppressWarnings("unused")
 public class MoveFiles {
 
 	public static void main(String[] args){
+		System.out.println("compare "+AssociationWrapper.INSTANTIATION_STR.equals(null));
 		HashMap<String, String> map = new HashMap<String,String>();
 //		map.put(null, "batata");
 		String x = (String) null;

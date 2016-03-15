@@ -25,13 +25,15 @@ public class ModelManager {
 		for (ModelElementWrapper element : getModelCopy().values()) {
 			if(element instanceof ClassWrapper){
 				((ClassWrapper) element).loadOrder();
-				LogUtilitary.log(((ClassWrapper) element).smallReportC());
+//				LogUtilitary.log(((ClassWrapper) element).smallReportC());
+			} else {
+//				LogUtilitary.log(element.smallReport());
 			}
 		}
-//		for (ModelElementWrapper element : getModelCopy().values()) {
-//			LogUtilitary.log(element.smallReport());
-//			element.validate();
-//		}
+		for (ModelElementWrapper element : getModelCopy().values()) {
+			LogUtilitary.log(element.smallReport());
+			element.validate();
+		}
 	}
 	
 	public static HashMap<String, ModelElementWrapper> getModelCopy(){

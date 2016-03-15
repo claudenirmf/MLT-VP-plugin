@@ -57,7 +57,7 @@ public class AssociationWrapper extends ModelElementWrapper {
 		return getSourceEntity().toStereotypeArray();
 	}
 	
-	public boolean isInstantion(){
+	public boolean isInstantiation(){
 		for (String stereotype : getStereotypeList()) {
 //			LogUtilitary.log("isInstantion " + getId() + " STR " + stereotype);
 			if (INSTANTIATION_STR.equals(stereotype)) {
@@ -81,7 +81,16 @@ public class AssociationWrapper extends ModelElementWrapper {
 	public void validate() {
 //		LogUtilitary.log("validate");
 		checkPowerTypeTarget();
+//		checkDifferentOrderOnInstantiationRelation();
 	}
+
+//	private void checkDifferentOrderOnInstantiationRelation() {
+//		if(!(getTargetElement().getOrder() == getSourceElement().getOrder()+1)){
+//			LogUtilitary.log(
+//					"ERROR: '"+getTargetElement().getName()
+//					);
+//		}
+//	}
 
 	/*
 	 * Working just fine
@@ -89,12 +98,12 @@ public class AssociationWrapper extends ModelElementWrapper {
 	private void checkPowerTypeTarget() {
 //		LogUtilitary.log("checkPowerTypeTarget");
 		if(
-			isInstantion() &&
+			isInstantiation() &&
 			getTargetElement().isPowertype() &&
 			!IAssociationEnd.MULTIPLICITY_ONE_TO_MANY.equals(getTargetEndCardinality())
 		) {
 			LogUtilitary.log(
-				"ERRO: At the instantion relation '"
+				"ERROR: At the instantion relation '"
 				+getName()
 				+"' the target multiplicity must be [1..*] because it conects to a power type ("
 				+getTargetElement().getName()+")"
