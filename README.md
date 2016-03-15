@@ -1,4 +1,4 @@
-# MLTPlugin
+# MLT-VP-plugin
 
 This project contains a plugin developed for Visual Paradigm 12.0 (www.visual-paradigm.com) which
 adds validation cross-level relations based on MLT theory. In order to use this plugin, extract
