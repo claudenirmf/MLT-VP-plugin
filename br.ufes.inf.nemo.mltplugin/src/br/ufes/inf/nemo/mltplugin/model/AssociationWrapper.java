@@ -1,7 +1,10 @@
 package br.ufes.inf.nemo.mltplugin.model;
 
+import br.ufes.inf.nemo.mltplugin.LogUtilitary;
+
 import com.vp.plugin.model.IAssociation;
 import com.vp.plugin.model.IAssociationEnd;
+import com.vp.plugin.model.IModelElement;
 
 public class AssociationWrapper extends ModelElementWrapper {
 	
@@ -21,19 +24,33 @@ public class AssociationWrapper extends ModelElementWrapper {
 	}
 
 	public String getTargetElementId() {
-		return getSourceEntity().getTo().getId();
+		final IModelElement ret = getSourceEntity().getTo();
+		if(ret!=null){
+			return ret.getId();
+		}
+		return null;
 	}
 
 	public String getTargetEndCardinality() {
-		return ((IAssociationEnd) getSourceEntity().getToEnd()).getMultiplicity();
+		final IAssociationEnd ret = (IAssociationEnd) getSourceEntity().getToEnd();
+		//LogUtilitary.log("getTargetEndCardinality "+ret.getMultiplicity());
+		return ret.getMultiplicity();
 	}
 
 	public String getSourceElementId() {
-		return getSourceEntity().getFrom().getId();
+		final IModelElement ret = getSourceEntity().getFrom();
+		if (ret!=null) {
+			return ret.getId();
+		}
+		return null;
 	}
 
 	public String getSourceEndCardinality() {
-		return ((IAssociationEnd) getSourceEntity().getFromEnd()).getMultiplicity();
+		final IAssociationEnd ret = (IAssociationEnd) getSourceEntity().getFromEnd();
+		if (ret!=null) {
+			return ret.getMultiplicity();
+		}
+		return null;
 	}
 
 	public String[] getStereotypeList() {
@@ -42,7 +59,9 @@ public class AssociationWrapper extends ModelElementWrapper {
 	
 	public boolean isInstantion(){
 		for (String stereotype : getStereotypeList()) {
-			if (stereotype == INSTANTIATION_STR) {
+//			LogUtilitary.log("isInstantion " + getId() + " STR " + stereotype);
+			if (INSTANTIATION_STR.equals(stereotype)) {
+//				report();
 				return true;
 			}
 		}
@@ -56,6 +75,39 @@ public class AssociationWrapper extends ModelElementWrapper {
 				+", N_STR="+getStereotypeList().length
 				+", TARGET_ID="+getTargetElementId()
 				+", SOURCE_ID="+getSourceElementId();
+	}
+	
+	@Override
+	public void validate() {
+//		LogUtilitary.log("validate");
+		checkPowerTypeTarget();
+	}
+
+	/*
+	 * Working just fine
+	 */
+	private void checkPowerTypeTarget() {
+//		LogUtilitary.log("checkPowerTypeTarget");
+		if(
+			isInstantion() &&
+			getTargetElement().isPowertype() &&
+			!IAssociationEnd.MULTIPLICITY_ONE_TO_MANY.equals(getTargetEndCardinality())
+		) {
+			LogUtilitary.log(
+				"ERRO: At the instantion relation '"
+				+getName()
+				+"' the target multiplicity must be [1..*] because it conects to a power type ("
+				+getTargetElement().getName()+")"
+			);
+		}
+	}
+
+	public ClassWrapper getTargetElement() {
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getTargetElementId());
+	}
+
+	public ClassWrapper getSourceElement() {
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getSourceElementId());
 	}
 	
 }

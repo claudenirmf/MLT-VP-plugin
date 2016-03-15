@@ -17,10 +17,16 @@ public class GeneralizationWrapper extends ModelElementWrapper {
 		return getSourceEntity().getName();
 	}
 	
+	/*
+	 * This method is null-safe because generalizations must have a super type.
+	 */
 	public String getSuperTypeId() {
 		return getSourceEntity().getFrom().getId();
 	}
 	
+	/*
+	 * This method is null-safe because generalizations must have a sub type.
+	 */
 	public String getSubTypeId() {
 		return getSourceEntity().getTo().getId();
 	}

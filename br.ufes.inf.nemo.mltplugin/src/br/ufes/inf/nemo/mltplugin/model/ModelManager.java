@@ -23,8 +23,15 @@ public class ModelManager {
 			}
 		}
 		for (ModelElementWrapper element : getModelCopy().values()) {
-			LogUtilitary.log(element.report());
+			if(element instanceof ClassWrapper){
+				((ClassWrapper) element).loadOrder();
+				LogUtilitary.log(((ClassWrapper) element).smallReportC());
+			}
 		}
+//		for (ModelElementWrapper element : getModelCopy().values()) {
+//			LogUtilitary.log(element.smallReport());
+//			element.validate();
+//		}
 	}
 	
 	public static HashMap<String, ModelElementWrapper> getModelCopy(){
@@ -32,6 +39,15 @@ public class ModelManager {
 			modelCopyReference = new HashMap<String, ModelElementWrapper>();
 		}
 		return modelCopyReference;
+	}
+	
+	public static ModelElementWrapper getModelElementWrapper(String id) {
+//		LogUtilitary.log("getModelElementWrapper " + getModelCopy().get(id).getId());
+		return getModelCopy().get(id);
+	}
+	
+	public static void resetModelCopy() {
+		getModelCopy().clear();
 	}
 	
 }

@@ -40,6 +40,10 @@ public class ModelElementWrapper {
 			+")";
 	}
 	
+	public String smallReport(){
+		return getSourceEntity().getName()+", ID: "+getId();
+	}
+	
 	public String getId(){
 		return getSourceEntity().getId();
 	}
