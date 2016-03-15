@@ -225,5 +225,17 @@ public class ClassWrapper extends ModelElementWrapper {
 	public String smallReportC() {
 		return getSourceEntity().getName()+", ID: "+getId()+" ORDER: "+getOrder();
 	}
+
+	public AssociationWrapper getInstantiationRelationTo(ClassWrapper powerType) {
+		for (AssociationWrapper association : getOutcommingAssociations()) {
+			if(
+				association.isInstantiation() && 
+				association.getTargetElementId() == powerType.getId()
+			) {
+				return association;
+			}
+		}
+		return null;
+	}
 	
 }

@@ -5,9 +5,12 @@ import java.util.List;
 
 import br.ufes.inf.nemo.mltplugin.LogUtilitary;
 
+import com.vp.plugin.model.IAssociation;
+import com.vp.plugin.model.IAssociationEnd;
 import com.vp.plugin.model.IGeneralization;
 import com.vp.plugin.model.IGeneralizationSet;
 import com.vp.plugin.model.IModelElement;
+import com.vp.plugin.model.IRelationshipEnd;
 
 public class GeneralizationSetWrapper extends ModelElementWrapper {
 
@@ -65,6 +68,36 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 	@Override
 	public void validate() {
 		checkMatchingUMLPowerTypeMLTCharacterizer();
+		checkGeneralizationSetMetapropertiesByMultiplicity();
+	}
+
+	private void checkGeneralizationSetMetapropertiesByMultiplicity() {
+		final ClassWrapper powerType = getPowerType();
+		if(powerType!=null){
+			AssociationWrapper association = getSuperType().getInstantiationRelationTo(powerType);
+			if(association!=null){
+				if (
+					association.getTargetEndCardinality().endsWith("1") &&
+					!isDisjoint()
+				) {
+					LogUtilitary.log("ERROR: the generalization set '"
+						+getName()+"' cannot be overlapping since the association end of '"
+						+association.getName()+"'.upperbound == 1.");
+				}
+				if (
+					association.getTargetEndCardinality().startsWith("0") &&
+					isCovering()
+				) {
+					LogUtilitary.log("ERROR: the generalization set '"
+						+getName()+"' cannot be complete since the association end of '"
+						+association.getName()+"'.lowerbound == 0.");
+				}
+			}
+		}
+	}
+
+	public String getName() {
+		return getSourceEntity().getName();
 	}
 
 	/*

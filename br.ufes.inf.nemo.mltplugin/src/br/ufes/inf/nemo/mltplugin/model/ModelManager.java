@@ -6,6 +6,7 @@ import java.util.Iterator;
 import br.ufes.inf.nemo.mltplugin.LogUtilitary;
 
 import com.vp.plugin.ApplicationManager;
+import com.vp.plugin.model.IAssociationEnd;
 import com.vp.plugin.model.IModelElement;
 
 public class ModelManager {
@@ -50,6 +51,13 @@ public class ModelManager {
 	
 	public static void resetModelCopy() {
 		getModelCopy().clear();
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("ONE "+IAssociationEnd.MULTIPLICITY_ONE);
+		System.out.println("ONE_TO_MANY "+IAssociationEnd.MULTIPLICITY_ZERO_TO_MANY);
+		System.out.println("UNSPECIFIED "+IAssociationEnd.MULTIPLICITY_UNSPECIFIED);
+		System.out.println("Z_TO_MANY "+IAssociationEnd.MULTIPLICITY_ZERO_TO_MANY);
 	}
 	
 }
