@@ -7,7 +7,7 @@ the button "Run MLT Plugin" will appear under the menu "Tools/". The validation 
 view "Log", tab "MLTPlugin". The stereotypes <<powertype>> and <<instantiation>> must be added to the 
 application by the user.
 
-Versions:
+Required Versions:
  - Visual Paradigm 12.0 Community Edition
  - Java SE 7
 
