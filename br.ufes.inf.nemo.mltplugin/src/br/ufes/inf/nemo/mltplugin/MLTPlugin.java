@@ -6,7 +6,7 @@ import com.vp.plugin.VPPluginInfo;
 
 public class MLTPlugin implements VPPlugin {
 
-	public static final String PLUG_ID = "br.ufes.inf.nemo.mltplugin";
+	public static final String PLUGIN_ID = "br.ufes.inf.nemo.mltplugin";
 	
 	public void loaded(VPPluginInfo arg0) {
 		ApplicationManager

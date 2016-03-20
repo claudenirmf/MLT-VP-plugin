@@ -2,6 +2,7 @@ package br.ufes.inf.nemo.mltplugin.model;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 import br.ufes.inf.nemo.mltplugin.LogUtilitary;
 
@@ -11,7 +12,7 @@ import com.vp.plugin.model.IModelElement;
 
 public class ModelManager {
 	
-	private static HashMap<String, ModelElementWrapper> modelCopyReference;
+	private static ConcurrentHashMap<String, ModelElementWrapper> modelCopyReference;
 	
 	public static void populateModel(){
 		final Iterator<?> modelElementList = ApplicationManager
@@ -20,36 +21,36 @@ public class ModelManager {
 			final ModelElementWrapper wrappedElement = ModelElementWrapper
 					.wrapThis((IModelElement) modelElementList.next());
 			if(wrappedElement!=null){
-				getModelCopy().put(wrappedElement.getId(), wrappedElement);
+				registerModelElementWrapper(wrappedElement.getId(), wrappedElement);
 			}
 		}
 		for (ModelElementWrapper element : getModelCopy().values()) {
-			if(element instanceof ClassWrapper){
-				((ClassWrapper) element).loadOrder();
-//				LogUtilitary.log(((ClassWrapper) element).smallReportC());
-			} else {
-//				LogUtilitary.log(element.smallReport());
-			}
-		}
-		for (ModelElementWrapper element : getModelCopy().values()) {
-			LogUtilitary.log(element.smallReport());
+//			LogUtilitary.log(element.smallReport());
+			System.out.println(element.smallReport());
 			element.validate();
 		}
 	}
 	
-	public static HashMap<String, ModelElementWrapper> getModelCopy(){
+	private static ConcurrentHashMap<String, ModelElementWrapper> getModelCopy(){
 		if(modelCopyReference == null){
-			modelCopyReference = new HashMap<String, ModelElementWrapper>();
+			modelCopyReference = new ConcurrentHashMap<String, ModelElementWrapper>();
 		}
 		return modelCopyReference;
 	}
 	
-	public static ModelElementWrapper getModelElementWrapper(String id) {
-//		LogUtilitary.log("getModelElementWrapper " + getModelCopy().get(id).getId());
+	public synchronized static ModelElementWrapper getModelElementWrapper(String id) {
 		return getModelCopy().get(id);
 	}
 	
-	public static void resetModelCopy() {
+	public synchronized static ModelElementWrapper registerModelElementWrapper(String id, ModelElementWrapper element) {
+		return getModelCopy().put(id, element);
+	}
+	
+	public synchronized static ModelElementWrapper unregisterModelElementWrapper(String id){
+		return getModelCopy().remove(id);
+	}
+	
+	public synchronized static void resetModelCopy() {
 		getModelCopy().clear();
 	}
 	

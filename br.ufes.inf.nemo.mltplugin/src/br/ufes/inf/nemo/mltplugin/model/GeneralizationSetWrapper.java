@@ -121,11 +121,11 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 	}
 
 	public ClassWrapper getSuperType() {
-		return (ClassWrapper) ModelManager.getModelCopy().get(getSuperTypeId());
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getSuperTypeId());
 	}
 
 	public ClassWrapper getPowerType() {
-		return (ClassWrapper) ModelManager.getModelCopy().get(getPowerTypeId());
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getPowerTypeId());
 	}
 
 }

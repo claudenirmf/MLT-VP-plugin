@@ -98,7 +98,8 @@ public class ClassWrapper extends ModelElementWrapper {
 	public AssociationWrapper[] getIncommingAssociations() {
 		final List<AssociationWrapper> incommingRelations = new ArrayList<AssociationWrapper>();
 		for (String associationId : getIncommingAssociationsId()) {
-			final AssociationWrapper tmp = (AssociationWrapper) ModelManager.getModelCopy().get(associationId);
+			final AssociationWrapper tmp = 
+					(AssociationWrapper) ModelManager.getModelElementWrapper(associationId);
 			if (tmp != null) {
 				incommingRelations.add(tmp);
 			}
@@ -118,6 +119,7 @@ public class ClassWrapper extends ModelElementWrapper {
 	
 	@Override
 	public void validate() {
+		loadOrder();
 		checkPowerType();
 		checkUniqueinstantiationRelation();
 		checkSameOrderSpecialization();
