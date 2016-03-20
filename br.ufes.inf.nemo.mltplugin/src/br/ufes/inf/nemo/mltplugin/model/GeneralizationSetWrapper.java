@@ -80,7 +80,7 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 					association.getTargetEndCardinality().endsWith("1") &&
 					!isDisjoint()
 				) {
-					LogUtilitary.log("ERROR: the generalization set '"
+					LogUtilitary.validationLog("ERROR: the generalization set '"
 						+getName()+"' cannot be overlapping since the association end of '"
 						+association.getName()+"'.upperbound == 1.");
 				}
@@ -88,7 +88,7 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 					association.getTargetEndCardinality().startsWith("0") &&
 					isCovering()
 				) {
-					LogUtilitary.log("ERROR: the generalization set '"
+					LogUtilitary.validationLog("ERROR: the generalization set '"
 						+getName()+"' cannot be complete since the association end of '"
 						+association.getName()+"'.lowerbound == 0.");
 				}
@@ -109,11 +109,11 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 	private void checkMatchingUMLPowerTypeMLTCharacterizer() {
 //		LogUtilitary.log("another");
 		if(getPowerType().isPowertype()){
-			LogUtilitary.log("ERRO: '"+getPowerType().getName()
+			LogUtilitary.validationLog("ERROR: '"+getPowerType().getName()
 					+"' cannot classify a generalization set since it's a power type."
 					);
 		} else if(!getSuperType().isBaseTypeof(getPowerTypeId())){
-			LogUtilitary.log("ERRO: Missing <<instantitation>> between characterizer type ("
+			LogUtilitary.validationLog("ERROR: Missing <<instantitation>> between characterizer type ("
 				+(getPowerType()==null ? "" : getPowerType().getName())+") and  base type ("
 				+getSuperType().getName()+") in set("+getSourceEntity().getName()
 				+" ID="+getId()+")");

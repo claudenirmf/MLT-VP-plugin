@@ -1,22 +1,32 @@
 package br.ufes.inf.nemo.mltplugin;
 
+import java.util.Date;
+
 import com.vp.plugin.ApplicationManager;
 
 public class LogUtilitary {
 
-	public static final String LOG_ID = "MLT Plugin";
+	public static final String VALIDATION_TAB = "MLT Validation";
 	
-	public static void log(String msg){
+	public static void log(String msg) {
 		ApplicationManager
 			.instance()
 			.getViewManager()
-			.showMessage(msg, LOG_ID);
+			.showMessage("["+new Date()+"] "+msg);
+	}
+	
+	public static void validationLog(String msg){
+		ApplicationManager
+			.instance()
+			.getViewManager()
+			.showMessage(msg, VALIDATION_TAB);
 	}
 
-	public static void clearLog() {
+	public static void clearValidationLog() {
 		ApplicationManager
 			.instance()
 			.getViewManager()
-			.clearMessages(LOG_ID);
+			.clearMessages(VALIDATION_TAB);
 	}
+	
 }

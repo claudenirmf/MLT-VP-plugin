@@ -102,7 +102,7 @@ public class AssociationWrapper extends ModelElementWrapper {
 			getTargetElement().isPowertype() &&
 			!IAssociationEnd.MULTIPLICITY_ONE_TO_MANY.equals(getTargetEndCardinality())
 		) {
-			LogUtilitary.log(
+			LogUtilitary.validationLog(
 				"ERROR: At the instantion relation '"
 				+getName()
 				+"' the target multiplicity must be [1..*] because it conects to a power type ("

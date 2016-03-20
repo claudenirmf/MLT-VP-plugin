@@ -13,8 +13,9 @@ public class ReloadMLTPluginActionController implements VPActionController {
 
 	public void performAction(VPAction arg0) {
 		LogUtilitary.log("Reloading again "+MLTPlugin.PLUGIN_ID+"...");
+		MLTPlugin.unloadModelListener();
 		ApplicationManager.instance().reloadPluginClasses(MLTPlugin.PLUGIN_ID);
-		LogUtilitary.clearLog();
+		LogUtilitary.clearValidationLog();
 		LogUtilitary.log("Reloading complete! ["+new Date()+"]");
 	}
 

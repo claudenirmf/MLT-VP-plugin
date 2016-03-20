@@ -18,6 +18,15 @@
 				<actionController class="br.ufes.inf.nemo.mltplugin.actions.ReloadMLTPluginActionController" />
 			</action>
 			<action 
+					id="br.ufes.inf.nemo.mltplugin.actions.AddMLTStereotypesAction"
+					actionType="generalAction" 
+					label="Add MLT Stereotypes" 
+					tooltip="Add MLT stereotyypes into the project" 
+					style="normal"
+					menuPath="Tools/#">
+				<actionController class="br.ufes.inf.nemo.mltplugin.actions.AddMLTStereotypesActionController" />
+			</action>
+			<action 
 					id="br.ufes.inf.nemo.mltplugin.actions.RunValidationAction"
 					actionType="generalAction"
 					label="Run MLT Plugin"

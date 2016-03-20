@@ -1,10 +1,7 @@
 package br.ufes.inf.nemo.mltplugin.model;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
-
-import br.ufes.inf.nemo.mltplugin.LogUtilitary;
 
 import com.vp.plugin.ApplicationManager;
 import com.vp.plugin.model.IAssociationEnd;
@@ -25,7 +22,6 @@ public class ModelManager {
 			}
 		}
 		for (ModelElementWrapper element : getModelCopy().values()) {
-//			LogUtilitary.log(element.smallReport());
 			System.out.println(element.smallReport());
 			element.validate();
 		}

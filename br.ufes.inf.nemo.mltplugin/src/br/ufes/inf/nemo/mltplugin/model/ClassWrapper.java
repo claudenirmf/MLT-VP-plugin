@@ -14,7 +14,7 @@ import com.vp.plugin.model.ISimpleRelationship;
 
 public class ClassWrapper extends ModelElementWrapper {
 
-	private static final String POWERTYPE_STR = "powertype";
+	public static final String POWERTYPE_STR = "powertype";
 	
 	private int order = 0;
 	
@@ -130,7 +130,7 @@ public class ClassWrapper extends ModelElementWrapper {
 			if(relationship instanceof IGeneralization){
 				final ClassWrapper superType = (ClassWrapper) ModelManager.getModelElementWrapper(relationship.getFrom().getId());
 				if(getOrder() != superType.getOrder()){
-					LogUtilitary.log(
+					LogUtilitary.validationLog(
 							"ERROR: '"+getName()+"' (order="+getOrder()
 							+") cannot specialize an entity of a different order, '"
 							+superType.getName()+"' (order="+superType.getOrder()+").");
@@ -147,7 +147,7 @@ public class ClassWrapper extends ModelElementWrapper {
 			}
 		}
 		if(count>1){
-			LogUtilitary.log("ERROR: '"+getName()+"' is target of "+count
+			LogUtilitary.validationLog("ERROR: '"+getName()+"' is target of "+count
 				+" instantiation relations. The maximum is one. This error may lead to wrong order assignment.");
 		}
 	}
@@ -161,12 +161,12 @@ public class ClassWrapper extends ModelElementWrapper {
 				}
 			}
 			if (n_instatiations == 0) {
-				LogUtilitary.log(
-					"ERRO: the power type '"+getName()+"' must be target of at least one instantiation relation."
+				LogUtilitary.validationLog(
+					"ERROR: the power type '"+getName()+"' must be target of at least one instantiation relation."
 					);
 			} else if (n_instatiations > 1) {
-				LogUtilitary.log(
-					"ERRO: the power type '"+getName()+"' must be target of at most one instantiation relation."
+				LogUtilitary.validationLog(
+					"ERROR: the power type '"+getName()+"' must be target of at most one instantiation relation."
 					);
 			}
 		}
