@@ -24,14 +24,16 @@ public class ModelElementWrapper {
 		}
 	}
 	
-	ModelElementWrapper(IModelElement source){
-		sourceEntity = source;
-	}
+	ModelElementWrapper(IModelElement source){ sourceEntity = source; }
 	
-	public IModelElement getSourceEntity(){
-		return sourceEntity;
-	}
+	public IModelElement getSourceEntity(){	return sourceEntity; }
 	
+	public String getId(){ return getSourceEntity().getId(); }
+
+	public String smallReport(){
+		return getSourceEntity().getName()+", ID: "+getId();
+	}
+
 	public String report(){
 		return "Model Element(NAME="
 			+getSourceEntity().getName()
@@ -40,15 +42,6 @@ public class ModelElementWrapper {
 			+")";
 	}
 	
-	public String smallReport(){
-		return getSourceEntity().getName()+", ID: "+getId();
-	}
-	
-	public String getId(){
-		return getSourceEntity().getId();
-	}
-	
-	public void validate() {
-	}
+	public void validate() {}
 
 }

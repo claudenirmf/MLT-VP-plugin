@@ -1,5 +1,6 @@
 package br.ufes.inf.nemo.mltplugin.model;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,7 +22,16 @@ public class ModelManager {
 				registerModelElementWrapper(wrappedElement.getId(), wrappedElement);
 			}
 		}
-		for (ModelElementWrapper element : getModelCopy().values()) {
+	}
+	
+	public static void validateModel(){
+		System.out.println("Validating...");
+		for (ModelElementWrapper element : getAllModelElements()) {
+			if (element instanceof ClassWrapper) {
+				((ClassWrapper) element).loadOrder();
+			}
+		}
+		for (ModelElementWrapper element : getAllModelElements()) {
 			System.out.println(element.smallReport());
 			element.validate();
 		}
@@ -48,6 +58,10 @@ public class ModelManager {
 	
 	public synchronized static void resetModelCopy() {
 		getModelCopy().clear();
+	}
+	
+	public synchronized static Iterable<ModelElementWrapper> getAllModelElements(){
+		return getModelCopy().values();
 	}
 	
 	public static void main(String[] args) {

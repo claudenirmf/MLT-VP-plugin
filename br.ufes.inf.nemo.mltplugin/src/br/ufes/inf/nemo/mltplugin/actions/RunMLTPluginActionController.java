@@ -14,7 +14,8 @@ public class RunMLTPluginActionController implements VPActionController {
 		LogUtilitary.clearValidationLog();
 		ModelManager.resetModelCopy();
 		ModelManager.populateModel();
-		MLTPlugin.loadModelListener();
+		ModelManager.validateModel();
+//		MLTPlugin.loadModelListener();
 	}
 
 	public void update(VPAction arg0) {}

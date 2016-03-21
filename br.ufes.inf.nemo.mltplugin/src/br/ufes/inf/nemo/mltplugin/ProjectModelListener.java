@@ -1,6 +1,4 @@
-package br.ufes.inf.nemo.mltplugin.live;
-
-import br.ufes.inf.nemo.mltplugin.LogUtilitary;
+package br.ufes.inf.nemo.mltplugin;
 
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IProject;

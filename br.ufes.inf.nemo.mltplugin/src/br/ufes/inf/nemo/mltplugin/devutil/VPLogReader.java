@@ -5,15 +5,11 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class VPLogReader {
-	final static String VP_LOG_FILE_NAME = 
-			"C:\\Users\\Claudenir\\AppData\\Roaming\\VisualParadigm\\vp.log";
 
 	public static void main(String[] args) throws IOException {
+		final String logFilePath = args[0];
 		final BufferedReader vpLogBuffer = 
-				new BufferedReader(new FileReader(VP_LOG_FILE_NAME));
-//		Runtime.getRuntime().addShutdownHook(new Thread() {
-//			vpLog
-//		});
+				new BufferedReader(new FileReader(logFilePath));
 		
 		try{
 			String line;

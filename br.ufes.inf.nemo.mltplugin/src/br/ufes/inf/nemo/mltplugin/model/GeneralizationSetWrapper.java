@@ -23,6 +23,10 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 		return (IGeneralizationSet) super.getSourceEntity();
 	}
 	
+	public String getName() {
+		return getSourceEntity().getName();
+	}
+
 	public String getPowerTypeId(){
 		final IModelElement powerType = getSourceEntity().getPowerType();
 		if (powerType!=null) {
@@ -31,6 +35,10 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 		return null;
 	}
 	
+	public ClassWrapper getPowerType() {
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getPowerTypeId());
+	}
+
 	/*
 	 * The method is null safe, because a generalization set will have at least one generalization
 	 */
@@ -38,15 +46,19 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 		return getSourceEntity().toGeneralizationArray()[0].getFrom().getId();
 	}
 	
+	public ClassWrapper getSuperType() {
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getSuperTypeId());
+	}
+
 	/*
 	 * The method is null safe, because a generalization set will have at least one generalization
 	 */
 	public String[] getSubTypesId(){
-		final List<String> ret = new ArrayList<String>();
+		final List<String> subTypesIds = new ArrayList<String>();
 		for (IGeneralization generalization : getSourceEntity().toGeneralizationArray()) {
-			ret.add(generalization.getTo().getId());
+			subTypesIds.add(generalization.getTo().getId());
 		}
-		return ret.toArray(new String[0]);
+		return subTypesIds.toArray(new String[0]);
 	}
 	
 	public boolean isDisjoint(){
@@ -73,31 +85,28 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 
 	private void checkGeneralizationSetMetapropertiesByMultiplicity() {
 		final ClassWrapper powerType = getPowerType();
-		if(powerType!=null){
-			AssociationWrapper association = getSuperType().getInstantiationRelationTo(powerType);
-			if(association!=null){
-				if (
-					association.getTargetEndCardinality().endsWith("1") &&
-					!isDisjoint()
-				) {
-					LogUtilitary.validationLog("ERROR: the generalization set '"
-						+getName()+"' cannot be overlapping since the association end of '"
-						+association.getName()+"'.upperbound == 1.");
-				}
-				if (
-					association.getTargetEndCardinality().startsWith("0") &&
-					isCovering()
-				) {
-					LogUtilitary.validationLog("ERROR: the generalization set '"
-						+getName()+"' cannot be complete since the association end of '"
-						+association.getName()+"'.lowerbound == 0.");
-				}
-			}
+		if(powerType!=null){ return ; }
+		
+		AssociationWrapper association = getSuperType().getInstantionTo(powerType);
+		if(association==null){
+			return ;
 		}
-	}
-
-	public String getName() {
-		return getSourceEntity().getName();
+		if (
+			association.getTargetEndCardinality().endsWith("1") &&
+			!isDisjoint()
+		) {
+			LogUtilitary.validationLog("ERROR: the generalization set '"
+					+getName()+"' cannot be overlapping since the association end of '"
+					+association.getName()+"'.upperbound == 1.");
+		}
+		if (
+			association.getTargetEndCardinality().startsWith("0") &&
+			isCovering()
+		) {
+			LogUtilitary.validationLog("ERROR: the generalization set '"
+					+getName()+"' cannot be complete since the association end of '"
+					+association.getName()+"'.lowerbound == 0.");
+		}
 	}
 
 	/*
@@ -107,7 +116,6 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 	 * relation between the super type and the power type.
 	 */
 	private void checkMatchingUMLPowerTypeMLTCharacterizer() {
-//		LogUtilitary.log("another");
 		if(getPowerType().isPowertype()){
 			LogUtilitary.validationLog("ERROR: '"+getPowerType().getName()
 					+"' cannot classify a generalization set since it's a power type."
@@ -118,14 +126,6 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 				+getSuperType().getName()+") in set("+getSourceEntity().getName()
 				+" ID="+getId()+")");
 		}
-	}
-
-	public ClassWrapper getSuperType() {
-		return (ClassWrapper) ModelManager.getModelElementWrapper(getSuperTypeId());
-	}
-
-	public ClassWrapper getPowerType() {
-		return (ClassWrapper) ModelManager.getModelElementWrapper(getPowerTypeId());
 	}
 
 }

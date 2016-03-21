@@ -1,7 +1,5 @@
 package br.ufes.inf.nemo.mltplugin;
 
-import br.ufes.inf.nemo.mltplugin.live.ProjectModelListener;
-
 import com.vp.plugin.ApplicationManager;
 import com.vp.plugin.VPPlugin;
 import com.vp.plugin.VPPluginInfo;

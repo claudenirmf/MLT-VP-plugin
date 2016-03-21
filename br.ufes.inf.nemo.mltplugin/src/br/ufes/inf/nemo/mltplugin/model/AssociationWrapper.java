@@ -23,6 +23,10 @@ public class AssociationWrapper extends ModelElementWrapper {
 		return getSourceEntity().getName();
 	}
 
+	public ClassWrapper getTargetElement() {
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getTargetElementId());
+	}
+
 	public String getTargetElementId() {
 		final IModelElement ret = getSourceEntity().getTo();
 		if(ret!=null){
@@ -35,6 +39,10 @@ public class AssociationWrapper extends ModelElementWrapper {
 		final IAssociationEnd ret = (IAssociationEnd) getSourceEntity().getToEnd();
 		//LogUtilitary.log("getTargetEndCardinality "+ret.getMultiplicity());
 		return ret.getMultiplicity();
+	}
+
+	public ClassWrapper getSourceElement() {
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getSourceElementId());
 	}
 
 	public String getSourceElementId() {
@@ -109,14 +117,6 @@ public class AssociationWrapper extends ModelElementWrapper {
 				+getTargetElement().getName()+")"
 			);
 		}
-	}
-
-	public ClassWrapper getTargetElement() {
-		return (ClassWrapper) ModelManager.getModelElementWrapper(getTargetElementId());
-	}
-
-	public ClassWrapper getSourceElement() {
-		return (ClassWrapper) ModelManager.getModelElementWrapper(getSourceElementId());
 	}
 	
 }
