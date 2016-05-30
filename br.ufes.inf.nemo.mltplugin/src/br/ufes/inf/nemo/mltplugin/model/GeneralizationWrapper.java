@@ -39,4 +39,8 @@ public class GeneralizationWrapper extends ModelElementWrapper {
 				+", SUB="+getSubTypeId();
 	}
 
+	public ClassWrapper getSuperType() {
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getSuperTypeId());
+	}
+
 }

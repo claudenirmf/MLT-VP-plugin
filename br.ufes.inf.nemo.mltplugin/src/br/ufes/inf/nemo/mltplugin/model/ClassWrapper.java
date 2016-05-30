@@ -1,7 +1,10 @@
 package br.ufes.inf.nemo.mltplugin.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import br.ufes.inf.nemo.mltplugin.LogUtilitary;
 
@@ -9,6 +12,7 @@ import com.vp.plugin.model.IAssociationEnd;
 import com.vp.plugin.model.IClass;
 import com.vp.plugin.model.IGeneralization;
 import com.vp.plugin.model.IMultiplicity;
+import com.vp.plugin.model.IReference;
 import com.vp.plugin.model.IRelationshipEnd;
 import com.vp.plugin.model.ISimpleRelationship;
 
@@ -44,14 +48,14 @@ public class ClassWrapper extends ModelElementWrapper {
 		ClassWrapper tmp = this;
 		while(tmp != null){
 			if(visitedIds.contains(tmp.getId())){
-				setOrder(0);
+				setOrder(1);
 				return ;
 			} else {
-				visitedIds.add(getId());
+				visitedIds.add(tmp.getId());
 			}
 			tmp = tmp.getBaseType();
 		}
-		setOrder(visitedIds.size());
+		setOrder(visitedIds.size()+1);
 	}
 
 	public String getName(){
@@ -140,6 +144,37 @@ public class ClassWrapper extends ModelElementWrapper {
 		}
 		return null;
 	}
+	
+	public Set<ClassWrapper> getSuperTypes(){
+		Set<ClassWrapper> superTypes = new LinkedHashSet<ClassWrapper>();
+		if(getSourceEntity().toReferenceArray()==null){ return superTypes; }
+		
+		for (IReference reference : getSourceEntity().toReferenceArray()) {
+			final ModelElementWrapper ele = ModelManager.getModelElementWrapper(reference.getId());
+			if(ele instanceof GeneralizationWrapper){
+				superTypes.add(((GeneralizationWrapper) ele).getSuperType());
+			}
+		};
+		return superTypes;
+	}
+	
+	
+	/**
+	 * Returns all super types of a class.
+	 * 
+	 * @param classHierarchy - an empty set
+	 * @return the classHierarchy set with all super types added to it
+	 * @author Claudenir Fonseca
+	 */
+	public Set<ClassWrapper> getClassHierarchy(Set<ClassWrapper> classHierarchy){
+		for (ClassWrapper superType : getSuperTypes()) {
+			if(!classHierarchy.contains(superType)){
+				classHierarchy.add(superType);
+				classHierarchy.addAll(superType.getSuperTypes());
+			}
+		}
+		return classHierarchy;
+	}
 
 	public boolean isPowertype(){
 		for (String stereotype : getStereotypeList()) {
@@ -174,6 +209,7 @@ public class ClassWrapper extends ModelElementWrapper {
 		checkPowerType();
 		checkUniqueinstantiationRelation();
 		checkSameOrderSpecialization();
+		checkPowerTypeSpecialization();
 	}
 
 	private void checkSameOrderSpecialization() {
@@ -219,6 +255,23 @@ public class ClassWrapper extends ModelElementWrapper {
 				LogUtilitary.validationLog(
 					"ERROR: the power type '"+getName()+"' must be target of at most one instantiation relation."
 					);
+			}
+		}
+	}
+	
+	private void checkPowerTypeSpecialization(){
+		ClassWrapper baseType = getBaseType();
+		if(baseType==null){ return ; }
+		
+		Set<ClassWrapper> baseTypeHierarchy = baseType.getClassHierarchy(new LinkedHashSet<ClassWrapper>());
+		for (ClassWrapper superType : getClassHierarchy(new LinkedHashSet<ClassWrapper>())) {
+			if(superType.isPowertype()
+					&& superType.getBaseType()!=null
+					&& !baseTypeHierarchy.contains(superType.getBaseType())
+			){
+				LogUtilitary.validationLog(
+						"ERROR: '"+baseType.getName()+"' must speciliaze '"+superType.getBaseType().getName()+
+						"' (powertype hierarchy of '"+getName()+"').");
 			}
 		}
 	}
