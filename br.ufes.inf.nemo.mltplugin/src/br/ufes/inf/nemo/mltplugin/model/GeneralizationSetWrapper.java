@@ -5,9 +5,12 @@ import java.util.List;
 
 import br.ufes.inf.nemo.mltplugin.LogUtilitary;
 
+import com.vp.plugin.model.IAssociation;
+import com.vp.plugin.model.IAssociationEnd;
 import com.vp.plugin.model.IGeneralization;
 import com.vp.plugin.model.IGeneralizationSet;
 import com.vp.plugin.model.IModelElement;
+import com.vp.plugin.model.IRelationshipEnd;
 
 public class GeneralizationSetWrapper extends ModelElementWrapper {
 
@@ -20,6 +23,10 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 		return (IGeneralizationSet) super.getSourceEntity();
 	}
 	
+	public String getName() {
+		return getSourceEntity().getName();
+	}
+
 	public String getPowerTypeId(){
 		final IModelElement powerType = getSourceEntity().getPowerType();
 		if (powerType!=null) {
@@ -28,6 +35,10 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 		return null;
 	}
 	
+	public ClassWrapper getPowerType() {
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getPowerTypeId());
+	}
+
 	/*
 	 * The method is null safe, because a generalization set will have at least one generalization
 	 */
@@ -35,15 +46,19 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 		return getSourceEntity().toGeneralizationArray()[0].getFrom().getId();
 	}
 	
+	public ClassWrapper getSuperType() {
+		return (ClassWrapper) ModelManager.getModelElementWrapper(getSuperTypeId());
+	}
+
 	/*
 	 * The method is null safe, because a generalization set will have at least one generalization
 	 */
 	public String[] getSubTypesId(){
-		final List<String> ret = new ArrayList<String>();
+		final List<String> subTypesIds = new ArrayList<String>();
 		for (IGeneralization generalization : getSourceEntity().toGeneralizationArray()) {
-			ret.add(generalization.getTo().getId());
+			subTypesIds.add(generalization.getTo().getId());
 		}
-		return ret.toArray(new String[0]);
+		return subTypesIds.toArray(new String[0]);
 	}
 	
 	public boolean isDisjoint(){
@@ -65,6 +80,33 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 	@Override
 	public void validate() {
 		checkMatchingUMLPowerTypeMLTCharacterizer();
+		checkGeneralizationSetMetapropertiesByMultiplicity();
+	}
+
+	private void checkGeneralizationSetMetapropertiesByMultiplicity() {
+		final ClassWrapper powerType = getPowerType();
+		if(powerType!=null){ return ; }
+		
+		AssociationWrapper association = getSuperType().getInstantionTo(powerType);
+		if(association==null){
+			return ;
+		}
+		if (
+			association.getTargetEndCardinality().endsWith("1") &&
+			!isDisjoint()
+		) {
+			LogUtilitary.validationLog("ERROR: the generalization set '"
+					+getName()+"' cannot be overlapping since the association end of '"
+					+association.getName()+"'.upperbound == 1.");
+		}
+		if (
+			association.getTargetEndCardinality().startsWith("0") &&
+			isCovering()
+		) {
+			LogUtilitary.validationLog("ERROR: the generalization set '"
+					+getName()+"' cannot be complete since the association end of '"
+					+association.getName()+"'.lowerbound == 0.");
+		}
 	}
 
 	/*
@@ -74,25 +116,16 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 	 * relation between the super type and the power type.
 	 */
 	private void checkMatchingUMLPowerTypeMLTCharacterizer() {
-//		LogUtilitary.log("another");
 		if(getPowerType().isPowertype()){
-			LogUtilitary.log("ERRO: '"+getPowerType().getName()
+			LogUtilitary.validationLog("ERROR: '"+getPowerType().getName()
 					+"' cannot classify a generalization set since it's a power type."
 					);
 		} else if(!getSuperType().isBaseTypeof(getPowerTypeId())){
-			LogUtilitary.log("ERRO: Missing <<instantitation>> between characterizer type ("
+			LogUtilitary.validationLog("ERROR: Missing <<instantitation>> between characterizer type ("
 				+(getPowerType()==null ? "" : getPowerType().getName())+") and  base type ("
 				+getSuperType().getName()+") in set("+getSourceEntity().getName()
 				+" ID="+getId()+")");
 		}
-	}
-
-	public ClassWrapper getSuperType() {
-		return (ClassWrapper) ModelManager.getModelCopy().get(getSuperTypeId());
-	}
-
-	public ClassWrapper getPowerType() {
-		return (ClassWrapper) ModelManager.getModelCopy().get(getPowerTypeId());
 	}
 
 }

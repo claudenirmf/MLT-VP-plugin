@@ -18,8 +18,8 @@ GeneralizationWrapper:
 GeneralizationSetWrapper:
 	- (DONE) The UML power type of a generalization set cannot be a MLT power type
 	- (DONE) Verify matching UML power type and characterizator type
-	- Verify disjointness and completeness according to instantiation cardnilaty
-		- If target.upperBound == 1, then isDisjoint == true
-		- If target.lowerBound ==0, then isComplete == false
+	- (DONE) Verify disjointness and completeness according to instantiation cardnilaty
+		- (DONE) If target.upperBound == 1, then isDisjoint == true
+		- (DONE) If target.lowerBound ==0, then isComplete == false
 	- umlPowerType.order == superType.order++
 	- Complicated checking of no specialization between partitioners of a given type
