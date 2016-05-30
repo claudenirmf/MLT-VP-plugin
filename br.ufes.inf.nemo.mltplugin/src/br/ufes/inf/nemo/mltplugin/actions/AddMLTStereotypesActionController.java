@@ -22,19 +22,16 @@ public class AddMLTStereotypesActionController implements VPActionController {
 		boolean hasInstantiationStr = false;
 		boolean hasPowerTypeStr = false;
 		while(projectStereotypes.hasNext()){
-			switch (((IStereotype) projectStereotypes.next()).getName()) {
-			case ClassWrapper.POWERTYPE_STR:
+			final String aux = ((IStereotype) projectStereotypes.next()).getName();
+			if(aux.equals(ClassWrapper.POWERTYPE_STR)){
 				System.out.println("Project has already the stereotype <<"
 						+ClassWrapper.POWERTYPE_STR+">>.");
 				hasPowerTypeStr = true;
-				break;
-			case AssociationWrapper.INSTANTIATION_STR:
+			}
+			else if(aux.equals(AssociationWrapper.INSTANTIATION_STR)){
 				System.out.println("Project has already the stereotype <<"
 						+AssociationWrapper.INSTANTIATION_STR+">>.");
 				hasInstantiationStr = true;
-				break;
-			default:
-				break;
 			}
 		}
 		

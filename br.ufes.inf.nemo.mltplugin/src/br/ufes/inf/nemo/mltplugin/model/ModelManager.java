@@ -66,7 +66,7 @@ public class ModelManager {
 	
 	public static void main(String[] args) {
 		System.out.println("ONE "+IAssociationEnd.MULTIPLICITY_ONE);
-		System.out.println("ONE_TO_MANY "+IAssociationEnd.MULTIPLICITY_ZERO_TO_MANY);
+		System.out.println("ONE_TO_MANY "+IAssociationEnd.MULTIPLICITY_ONE_TO_MANY);
 		System.out.println("UNSPECIFIED "+IAssociationEnd.MULTIPLICITY_UNSPECIFIED);
 		System.out.println("Z_TO_MANY "+IAssociationEnd.MULTIPLICITY_ZERO_TO_MANY);
 	}

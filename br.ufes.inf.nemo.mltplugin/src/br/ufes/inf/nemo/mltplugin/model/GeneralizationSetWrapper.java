@@ -85,12 +85,13 @@ public class GeneralizationSetWrapper extends ModelElementWrapper {
 
 	private void checkGeneralizationSetMetapropertiesByMultiplicity() {
 		final ClassWrapper powerType = getPowerType();
-		if(powerType!=null){ return ; }
+		if(powerType==null){ return ; }
 		
 		AssociationWrapper association = getSuperType().getInstantionTo(powerType);
 		if(association==null){
 			return ;
 		}
+		
 		if (
 			association.getTargetEndCardinality().endsWith("1") &&
 			!isDisjoint()
